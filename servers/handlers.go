@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 func (state *apiState) middlewareMetricsInc(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -20,4 +23,3 @@ func handlerHealthCheck(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "text/plain;charset=utf-8")
 	w.Write([]byte("OK"))
 }
-
