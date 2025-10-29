@@ -16,10 +16,26 @@ func (state *apiState) handlerMetrics(w http.ResponseWriter, req *http.Request) 
 	hits := fmt.Sprintf("Hits: %v", state.fileserverHits.Load())
 	w.Write([]byte(hits))
 }
+
+func (state *apiState) handlerHtmlMetrics(w http.ResponseWriter, req *http.Request) {
+	hits := fmt.Sprintf("Chirpy has been visited %d times!", state.fileserverHits.Load())
+	template := `<html>
+	<body>
+		<h1>Welcome, Chirpy Admin</h1>
+		<p>%s</p>
+	</body>
+</html>
+	`
+
+	html := fmt.Sprintf(template, hits)
+	w.Header().Add("Content-Type", "text/html")
+	w.Write([]byte(html))
+}
+
 func (state *apiState) handlerReset(w http.ResponseWriter, req *http.Request) {
 	state.fileserverHits.Store(0)
 }
 func handlerHealthCheck(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "text/plain;charset=utf-8")
+	w.Header().Add("Content-Type", "plain/text; charset=utf-8")
 	w.Write([]byte("OK"))
 }
